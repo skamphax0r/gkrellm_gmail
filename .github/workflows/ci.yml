@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main, master ]
 
+# Cancel duplicate in-progress runs when new commits are pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-ubuntu:
     name: Build & Test (Ubuntu)
@@ -16,8 +21,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk2.0-dev libcurl4-openssl-dev libjson-glib-dev build-essential
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libgtk2.0-dev libcurl4-openssl-dev libjson-glib-dev build-essential
 
       - name: Build Plugin & Tools
         run: make
@@ -36,7 +41,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          dnf install -y gtk2-devel libcurl-devel json-glib-devel gcc make
+          dnf install -y --setopt=install_weak_deps=False --nodocs gtk2-devel libcurl-devel json-glib-devel gcc make
 
       - name: Build Plugin & Tools
         run: make
