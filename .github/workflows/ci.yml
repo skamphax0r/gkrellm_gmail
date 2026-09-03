@@ -17,7 +17,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgkrellm-dev libgtk2.0-dev libcurl4-openssl-dev libjson-glib-dev build-essential
+          sudo apt-get install -y libgtk2.0-dev libcurl4-openssl-dev libjson-glib-dev build-essential
 
       - name: Build Plugin & Tools
         run: make
@@ -36,7 +36,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          dnf install -y gkrellm-devel gtk2-devel libcurl-devel json-glib-devel gcc make
+          dnf install -y gtk2-devel libcurl-devel json-glib-devel gcc make
 
       - name: Build Plugin & Tools
         run: make

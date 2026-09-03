@@ -98,7 +98,7 @@ sudo dnf install -y gkrellm-devel gtk2-devel libcurl-devel json-glib-devel gcc m
 
 #### Debian / Ubuntu / Mint
 ```bash
-sudo apt-get install -y gkrellm libgkrellm-dev libgtk2.0-dev libcurl4-openssl-dev libjson-glib-dev build-essential
+sudo apt-get install -y gkrellm libgtk2.0-dev libcurl4-openssl-dev libjson-glib-dev build-essential
 ```
 
 #### Arch Linux
