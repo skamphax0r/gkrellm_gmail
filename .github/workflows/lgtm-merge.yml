@@ -1,0 +1,64 @@
+name: LGTM Auto-Merge
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  lgtm-merge:
+    name: Merge on /lgtm
+    if: ${{ github.event.issue.pull_request && (contains(github.event.comment.body, '/lgtm') || contains(github.event.comment.body, '/LGTM')) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check CODEOWNER / Collaborator Permission
+        id: check-permission
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const author = context.payload.comment.user.login;
+            const association = context.payload.comment.author_association;
+            
+            // Allow repository owners, members, and write collaborators
+            const allowedRoles = ['OWNER', 'MEMBER', 'COLLABORATOR'];
+            if (!allowedRoles.includes(association)) {
+              core.setFailed(`User @${author} with role ${association} is not authorized to /lgtm merge.`);
+              return false;
+            }
+            return true;
+
+      - name: Add Reaction to Comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: context.payload.comment.id,
+              content: 'rocket'
+            });
+
+      - name: Merge Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          # Merge the PR using the GitHub CLI
+          gh pr merge "$PR_NUMBER" --repo "${{ github.repository }}" --merge --admin || \
+          gh pr merge "$PR_NUMBER" --repo "${{ github.repository }}" --merge
+
+      - name: Post Confirmation Comment
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `🚀 Pull Request #${context.payload.issue.number} automatically merged following \`/lgtm\` approval by @${context.payload.comment.user.login}.`
+            });
