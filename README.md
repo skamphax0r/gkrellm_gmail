@@ -190,3 +190,23 @@ make test
 ## License
 
 GNU General Public License v3.0 ([GPL-3.0](LICENSE)).
+
+---
+
+## 7. Permanent Token Setup (In Production Mode)
+
+By default, Google puts new OAuth apps in **Testing** status, which causes refresh tokens to expire every 7 days. To make your token permanent:
+
+1. In the Google Cloud Console, go to **Branding**:
+   - Set **Application home page**: `https://github.com/skamphax0r/gkrellm_gmail`
+   - Set **Application privacy policy link**: `https://github.com/skamphax0r/gkrellm_gmail`
+   - Under **Authorized domains**, click **+ Add domain** and add `github.com`.
+   - Click **Save**.
+2. Go to **Audience**:
+   - Click **Publish app** and confirm. The status will change to **In production**.
+3. In GKrellM:
+   - Go to configuration > **Plugins** > **Gmail**.
+   - Click **Disconnect** and then **Authorize with Google** once more.
+   - If prompted with *"Google hasn't verified this app"*, click **Advanced** > **Go to GKrellM Gmail (unsafe)** > **Allow**.
+
+Your refresh token is now permanent and will never expire automatically.
