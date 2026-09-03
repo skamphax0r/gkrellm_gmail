@@ -1,6 +1,6 @@
 # GKrellM Gmail Monitor Plugin
 
-[![CI Build & Test](https://github.com/<your-username>/gkrellm_gmail/actions/workflows/ci.yml/badge.svg)](https://github.com/<your-username>/gkrellm_gmail/actions)
+[![CI Build & Test](https://github.com/skamphax0r/gkrellm_gmail/actions/workflows/ci.yml/badge.svg)](https://github.com/skamphax0r/gkrellm_gmail/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GKrellM: 2.x](https://img.shields.io/badge/GKrellM-2.x-green.svg)](http://gkrellm.srcbox.net/)
 
