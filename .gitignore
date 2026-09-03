@@ -1,0 +1,21 @@
+# Build outputs
+*.o
+*.so
+*.a
+gkrellm-gmail-auth
+tests/test_runner
+
+# User credentials & tokens (NEVER commit secrets)
+*client_secret*.json
+credentials.json
+token.json
+.env
+
+# Editor & OS files
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
+*.log
+/tmp/

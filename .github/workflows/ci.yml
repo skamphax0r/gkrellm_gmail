@@ -1,0 +1,45 @@
+name: CI Build & Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-ubuntu:
+    name: Build & Test (Ubuntu)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgkrellm-dev libgtk2.0-dev libcurl4-openssl-dev libjson-glib-dev build-essential
+
+      - name: Build Plugin & Tools
+        run: make
+
+      - name: Run Test Suite
+        run: make test
+
+  build-fedora:
+    name: Build & Test (Fedora Container)
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          dnf install -y gkrellm-devel gtk2-devel libcurl-devel json-glib-devel gcc make
+
+      - name: Build Plugin & Tools
+        run: make
+
+      - name: Run Test Suite
+        run: make test
