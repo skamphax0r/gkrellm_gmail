@@ -1,6 +1,6 @@
 # GKrellM Gmail Monitor Plugin
 
-[![CI Build & Test](https://github.com/skamphax0r/gkrellm_gmail/actions/workflows/ci.yml/badge.svg)](https://github.com/skamphax0r/gkrellm_gmail/actions)
+[![CI Build & Test](https://github.com/<your-username>/gkrellm_gmail/actions/workflows/ci.yml/badge.svg)](https://github.com/<your-username>/gkrellm_gmail/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GKrellM: 2.x](https://img.shields.io/badge/GKrellM-2.x-green.svg)](http://gkrellm.srcbox.net/)
 
@@ -108,7 +108,7 @@ sudo pacman -S gkrellm gtk2 curl json-glib base-devel
 
 ### Build and Install
 ```bash
-git clone https://github.com/skamphax0r/gkrellm_gmail.git
+git clone https://github.com/<your-username>/gkrellm_gmail.git
 cd gkrellm-gmail
 
 # Build the plugin and CLI tool:
@@ -198,8 +198,8 @@ GNU General Public License v3.0 ([GPL-3.0](LICENSE)).
 By default, Google puts new OAuth apps in **Testing** status, which causes refresh tokens to expire every 7 days. To make your token permanent:
 
 1. In the Google Cloud Console, go to **Branding**:
-   - Set **Application home page**: `https://github.com/skamphax0r/gkrellm_gmail`
-   - Set **Application privacy policy link**: `https://github.com/skamphax0r/gkrellm_gmail`
+   - Set **Application home page**: `https://github.com/<your-username>/gkrellm_gmail`
+   - Set **Application privacy policy link**: `https://github.com/<your-username>/gkrellm_gmail`
    - Under **Authorized domains**, click **+ Add domain** and add `github.com`.
    - Click **Save**.
 2. Go to **Audience**:
