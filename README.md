@@ -1,6 +1,6 @@
 # GKrellM Gmail Monitor Plugin
 
-[![CI Build & Test](https://github.com/anelson/gkrellm-gmail/actions/workflows/ci.yml/badge.svg)](https://github.com/anelson/gkrellm-gmail/actions)
+[![CI Build & Test](https://github.com/skamphax0r/gkrellm_gmail/actions/workflows/ci.yml/badge.svg)](https://github.com/skamphax0r/gkrellm_gmail/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GKrellM: 2.x](https://img.shields.io/badge/GKrellM-2.x-green.svg)](http://gkrellm.srcbox.net/)
 
@@ -108,7 +108,7 @@ sudo pacman -S gkrellm gtk2 curl json-glib base-devel
 
 ### Build and Install
 ```bash
-git clone https://github.com/your-username/gkrellm-gmail.git
+git clone https://github.com/skamphax0r/gkrellm_gmail.git
 cd gkrellm-gmail
 
 # Build the plugin and CLI tool:
