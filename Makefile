@@ -1,9 +1,9 @@
 CC ?= gcc
 CFLAGS ?= -Wall -Wextra -O2 -fPIC
-PKG_PACKAGES = gkrellm gtk+-2.0 libcurl json-glib-1.0
+PKG_PACKAGES = gtk+-2.0 libcurl json-glib-1.0
 
-PKG_CFLAGS = $(shell pkg-config --cflags $(PKG_PACKAGES))
-PKG_LIBS = $(shell pkg-config --libs $(PKG_PACKAGES))
+PKG_CFLAGS = $(shell pkg-config --cflags $(PKG_PACKAGES)) $(shell pkg-config --cflags gkrellm 2>/dev/null || true) -Iinclude
+PKG_LIBS = $(shell pkg-config --libs $(PKG_PACKAGES)) $(shell pkg-config --libs gkrellm 2>/dev/null || true)
 
 TARGET = gmail.so
 AUTH_CLI = gkrellm-gmail-auth

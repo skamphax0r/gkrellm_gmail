@@ -7,7 +7,7 @@ Thank you for your interest in contributing to the **GKrellM Gmail Plugin**!
 1. **Fork the repository** on GitHub.
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/skamphax0r/gkrellm_gmail.git
+   git clone https://github.com/<your-username>/gkrellm_gmail.git
    cd gkrellm-gmail
    ```
 3. **Install build dependencies**:
