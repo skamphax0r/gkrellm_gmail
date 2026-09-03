@@ -42,40 +42,48 @@ jobs:
               content: 'rocket'
             });
 
-      - name: Approve Pull Request
+      - name: Approve and Merge Pull Request
         uses: actions/github-script@v7
         with:
           script: |
+            const prNumber = context.payload.issue.number;
+            const commenter = context.payload.comment.user.login;
+            
+            // 1. Submit PR Approval Review
             try {
               await github.rest.pulls.createReview({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                pull_number: context.payload.issue.number,
+                pull_number: prNumber,
                 event: 'APPROVE',
-                body: `Approved via \`/lgtm\` by @${context.payload.comment.user.login}`
+                body: `Approved via \`/lgtm\` by @${commenter}`
               });
-              console.log(`PR #${context.payload.issue.number} successfully approved.`);
-            } catch (error) {
-              console.log(`Review note: ${error.message}`);
+              console.log(`PR #${prNumber} approved successfully.`);
+            } catch (err) {
+              console.log(`Approval note: ${err.message}`);
             }
 
-      - name: Merge Pull Request
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.issue.number }}
-        run: |
-          # Merge the PR using GitHub CLI
-          gh pr merge "$PR_NUMBER" --repo "${{ github.repository }}" --merge --admin || \
-          gh pr merge "$PR_NUMBER" --repo "${{ github.repository }}" --merge
-
-      - name: Post Confirmation Comment
-        if: success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.issue.number,
-              body: `🚀 Pull Request #${context.payload.issue.number} approved and merged following \`/lgtm\` by @${context.payload.comment.user.login}.`
-            });
+            // 2. Merge Pull Request
+            try {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                merge_method: 'merge'
+              });
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: `🚀 Pull Request #${prNumber} approved and merged following \`/lgtm\` by @${commenter}.`
+              });
+            } catch (err) {
+              core.setFailed(`Merge failed: ${err.message}`);
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: `⚠️ Could not merge PR #${prNumber}: ${err.message}\n\n*Note: Ensure GitHub Actions has "Read and write permissions" and "Allow GitHub Actions to create and approve pull requests" enabled in repository Settings > Actions > General.*`
+              });
+            }
