@@ -257,6 +257,39 @@ static void cb_update_monitor(void) {
 }
 
 /* Config UI Callbacks */
+static void cb_show_setup_help(GtkWidget *widget G_GNUC_UNUSED, gpointer data G_GNUC_UNUSED) {
+    const gchar *help_text =
+        "<b>Self-Hosted Google OAuth 2.0 Setup Guide</b>\n\n"
+        "To protect your privacy and retain 100% control over your account permissions, "
+        "each user sets up their own free OAuth Client ID directly in Google Cloud Console.\n\n"
+        "<b>1. Create Project & Enable API:</b>\n"
+        "• Go to <i>https://console.cloud.google.com/</i>\n"
+        "• Create a project (e.g. 'gkrellm-gmail') and enable the <b>Gmail API</b>.\n\n"
+        "<b>2. Configure OAuth Consent Screen & Scopes:</b>\n"
+        "• Go to <b>APIs & Services > OAuth consent screen</b>.\n"
+        "• Select <b>External</b>, set App Name to 'gkrellm-gmail', and enter your email.\n"
+        "• Under <b>Scopes</b>, add <code>https://www.googleapis.com/auth/gmail.readonly</code>.\n\n"
+        "<b>3. Create Credentials:</b>\n"
+        "• Go to <b>APIs & Services > Credentials</b>.\n"
+        "• Click <b>Create Credentials > OAuth client ID</b>.\n"
+        "• Select <b>Desktop App</b> (or Web App with redirect <code>http://127.0.0.1:8085</code>).\n"
+        "• Download the JSON file or copy the Client ID and Secret.\n\n"
+        "<b>4. Authorize:</b>\n"
+        "• Click <b>Import JSON...</b> (or paste ID and Secret), then click <b>Authorize with Google</b>.\n\n"
+        "<i>Tip: Publish the app on the 'Audience' tab to make tokens permanent (avoiding 7-day expiration).</i>";
+
+    GtkWidget *dialog = gtk_message_dialog_new_with_markup(
+        NULL,
+        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+        GTK_MESSAGE_INFO,
+        GTK_BUTTONS_OK,
+        "%s", help_text
+    );
+    gtk_window_set_title(GTK_WINDOW(dialog), "Google OAuth Setup Guide");
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+}
+
 static void cb_browse_secrets_file(GtkWidget *widget, gpointer data G_GNUC_UNUSED) {
     GtkWidget *dialog = gtk_file_chooser_dialog_new(
         "Select Google Client Secret JSON File",
@@ -413,7 +446,7 @@ static void cb_create_config(GtkWidget *tab_vbox) {
     cb_on_gmail_data_update(NULL);
 
     /* OAuth Credentials Frame */
-    GtkWidget *frame_oauth = gtk_frame_new("Google OAuth 2.0 Credentials");
+    GtkWidget *frame_oauth = gtk_frame_new("Google OAuth 2.0 Credentials (User Self-Hosted)");
     gtk_box_pack_start(GTK_BOX(vbox_tab1), frame_oauth, FALSE, FALSE, 0);
     GtkWidget *box_oauth = gtk_vbox_new(FALSE, 6);
     gtk_container_set_border_width(GTK_CONTAINER(box_oauth), 8);
@@ -442,6 +475,10 @@ static void cb_create_config(GtkWidget *tab_vbox) {
     /* Action Buttons Box */
     GtkWidget *hbox_auth_btns = gtk_hbox_new(FALSE, 6);
     gtk_box_pack_start(GTK_BOX(box_oauth), hbox_auth_btns, FALSE, FALSE, 4);
+
+    GtkWidget *btn_help = gtk_button_new_with_label("Setup Guide...");
+    g_signal_connect(G_OBJECT(btn_help), "clicked", G_CALLBACK(cb_show_setup_help), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox_auth_btns), btn_help, FALSE, FALSE, 0);
 
     GtkWidget *btn_import = gtk_button_new_with_label("Import JSON...");
     g_signal_connect(G_OBJECT(btn_import), "clicked", G_CALLBACK(cb_browse_secrets_file), NULL);
